@@ -36,7 +36,10 @@ jobs:
             dotnet build Microsoft.Maui.Gtk.slnf
             
       - name: Pack
-        run: dotnet pack --configuration Release --output nupkgs --no-build --no-restore Microsoft.Maui.Gtk.slnf
+        run: dotnet pack Microsoft.Maui.Gtk.slnf --configuration Release --output nupkgs --no-build --no-restore
+
+      - name: publish to nuget
+        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
   dotnet-format:
     needs: build_and_test
