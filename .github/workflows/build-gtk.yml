@@ -36,7 +36,7 @@ jobs:
             dotnet build Microsoft.Maui.Gtk.slnf
             
       - name: Pack
-        run: dotnet pack --configuration Release --output nupkgs --no-build --no-restore
+        run: dotnet pack --configuration Release --output nupkgs --no-build --no-restore Microsoft.Maui.Gtk.slnf
 
   dotnet-format:
     needs: build_and_test
