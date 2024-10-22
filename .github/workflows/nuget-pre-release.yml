@@ -25,7 +25,8 @@ jobs:
             C:\msys64\usr\bin\wget.exe https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
             set \a WORKLOAD_MANIFEST_DIR="C:\Program Files\dotnet\sdk-manifests\${{ env.DotnetVersion }}\gtksharp.net.sdk.gtk"
             mkdir -p %WORKLOAD_MANIFEST_DIR%
-            tar -xf -j gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg "data/*" -C %WORKLOAD_MANIFEST_DIR%\
+            7z x gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg -o"$env:RUNNER_TEMP\extracted"
+            7z e "$env:RUNNER_TEMP\extracted\data\*" -o"$env:WORKLOAD_MANIFEST_DIR" -r
             rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
             icacls %WORKLOAD_MANIFEST_DIR%\* /grant Everyone:F
             dotnet workload search
