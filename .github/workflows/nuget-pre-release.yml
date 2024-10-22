@@ -27,7 +27,7 @@ jobs:
             mkdir -p %WORKLOAD_MANIFEST_DIR%
             tar -xf -j gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg "data/*" -C %WORKLOAD_MANIFEST_DIR%\
             rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
-            icacls %WORKLOAD_MANIFEST_DIR%\* /grant Everyone:(F)
+            icacls %WORKLOAD_MANIFEST_DIR%\* /grant Everyone:F
             dotnet workload search
             dotnet workload install gtk --skip-manifest-update
 
