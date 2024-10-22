@@ -19,11 +19,10 @@ jobs:
           dotnet-version: ${{ env.DotnetVersion }}
 
       - name: Install gtk workload
-        shell: bash
         run: |
             # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
             dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
-            wget https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
+            C:\msys64\usr\bin\wget.exe https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
             DOTNET_DIR=/home/runner/.dotnet
             WORKLOAD_MANIFEST_DIR=$DOTNET_DIR/sdk-manifests/${{ env.DotnetVersion }}/gtksharp.net.sdk.gtk
             mkdir -p $WORKLOAD_MANIFEST_DIR
