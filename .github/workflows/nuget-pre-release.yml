@@ -25,6 +25,12 @@ jobs:
             Invoke-WebRequest 'https://raw.githubusercontent.com/HavenDV/Gtk/main/scripts/workload-install.ps1' -OutFile 'workload-install.ps1';
             ./workload-install.ps1
             rm workload-install.ps1
+            # build gtksharp
+            git clone https://github.com/GtkSharp/GtkSharp.git
+            cd GtkSharp
+            sudo dotnet tool restore
+            sudo dotnet cake --BuildTarget=InstallWorkload 
+            # install workload
             dotnet workload search
             dotnet workload install gtk --skip-manifest-update
 
