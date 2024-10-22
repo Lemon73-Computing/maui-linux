@@ -18,15 +18,12 @@ jobs:
         with:
           dotnet-version: ${{ env.DotnetVersion }}
 
-      - name: Add GTK to the Runner Environment
-        uses: yjpictures/GTK-Windows@v1
-
       - name: Install gtk workload
         run: |
             # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
             dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
             Invoke-WebRequest 'https://raw.githubusercontent.com/HavenDV/Gtk/main/scripts/workload-install.ps1' -OutFile 'workload-install.ps1';
-            ./workload-install.ps1
+            ./workload-install.ps1 -v ${{ env.DotnetVersion }}
             rm workload-install.ps1
             dotnet workload search
             dotnet workload install gtk --skip-manifest-update
