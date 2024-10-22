@@ -28,8 +28,8 @@ jobs:
             # build gtksharp
             git clone https://github.com/GtkSharp/GtkSharp.git
             cd GtkSharp
-            sudo dotnet tool restore
-            sudo dotnet cake --BuildTarget=InstallWorkload 
+            dotnet tool restore
+            dotnet cake --BuildTarget=InstallWorkload 
             # install workload
             dotnet workload search
             dotnet workload install gtk --skip-manifest-update
