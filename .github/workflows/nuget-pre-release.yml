@@ -30,7 +30,7 @@ jobs:
             # rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
             # icacls $Env:WORKLOAD_MANIFEST_DIR\* /grant Everyone:F
             # install gtk workload
-            git clone https://github.com/trungnt2910/GtkSharp.git
+            git clone https://github.com/GtkSharp/GtkSharp.git
             cd GtkSharp
             dotnet tool restore
             dotnet cake --BuildTarget=InstallWorkload
