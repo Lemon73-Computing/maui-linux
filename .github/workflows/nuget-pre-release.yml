@@ -30,11 +30,15 @@ jobs:
             # rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
             # icacls $Env:WORKLOAD_MANIFEST_DIR\* /grant Everyone:F
             # install gtk workload
-            git clone https://github.com/GtkSharp/GtkSharp.git
-            cd GtkSharp
-            dotnet tool restore
-            dotnet cake build.cake --BuildTarget=InstallWorkload
-            cp "C:\Program Files\dotnet\template-packs\*" "C:\Program Files\dotnet\templates\${{ env.DotnetVersion }}"
+            # git clone https://github.com/GtkSharp/GtkSharp.git
+            # cd GtkSharp
+            # dotnet tool restore
+            # dotnet cake build.cake --BuildTarget=InstallWorkload
+            # cp "C:\Program Files\dotnet\template-packs\*" "C:\Program Files\dotnet\templates\${{ env.DotnetVersion }}"
+            choco install msys2
+            refreshenv
+            pacman -Syu
+            pacman -S mingw-w64-x86_64-gtk3
             dotnet workload search
             dotnet workload install gtk --skip-manifest-update
 
