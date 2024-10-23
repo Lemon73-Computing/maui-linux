@@ -21,14 +21,17 @@ jobs:
       - name: Install gtk workload
         run: |
             # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
-            dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
-            C:\msys64\usr\bin\wget.exe https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$Env:GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
-            $Env:WORKLOAD_MANIFEST_DIR = "C:\Program Files\dotnet\sdk-manifests\${{ env.DotnetVersion }}\gtksharp.net.sdk.gtk"
-            mkdir -p $Env:WORKLOAD_MANIFEST_DIR
-            tar -xf gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
-            cp data\* $Env:WORKLOAD_MANIFEST_DIR\
-            rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
-            icacls $Env:WORKLOAD_MANIFEST_DIR\* /grant Everyone:F
+            # dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
+            # C:\msys64\usr\bin\wget.exe https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$Env:GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
+            # $Env:WORKLOAD_MANIFEST_DIR = "C:\Program Files\dotnet\sdk-manifests\${{ env.DotnetVersion }}\gtksharp.net.sdk.gtk"
+            # mkdir -p $Env:WORKLOAD_MANIFEST_DIR
+            # tar -xf gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
+            # cp data\* $Env:WORKLOAD_MANIFEST_DIR\
+            # rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
+            # icacls $Env:WORKLOAD_MANIFEST_DIR\* /grant Everyone:F
+            # install gtk workload
+            git clone https://github.com/trungnt2910/GtkSharp.git
+            dotnet cake --BuildTarget=InstallWorkload
             dotnet workload search
             dotnet workload install gtk --skip-manifest-update
 
