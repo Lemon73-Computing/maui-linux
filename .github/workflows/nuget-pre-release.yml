@@ -32,9 +32,8 @@ jobs:
             # install gtk workload
             git clone https://github.com/trungnt2910/GtkSharp.git
             cd GtkSharp
-            dotnet add package Cake.FileHelpers --version 5.0.0
             dotnet tool restore
-            dotnet cake --BuildTarget=InstallWorkload
+            dotnet cake --BuildTarget=InstallWorkload --restore
             cp "C:\Program Files\dotnet\template-packs\*" "C:\Program Files\dotnet\templates\${{ env.DotnetVersion }}"
             dotnet workload search
             dotnet workload install gtk --skip-manifest-update
