@@ -18,6 +18,14 @@ jobs:
         with:
           dotnet-version: ${{ env.DotnetVersion }}
 
+      - uses: msys2/setup-msys2@v2
+      - name: Install gtk3
+        shell: msys2 {0}
+        run: |
+            pacman -S mingw-w64-x86_64-gtk3
+            SETX /M PATH "%PATH%;C:\msys64\mingw64\bin"
+            SETX /M PATH "%PATH%;C:\msys32\mingw32\bin"
+
       - name: Install gtk workload
         run: |
             # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
@@ -35,10 +43,10 @@ jobs:
             # dotnet tool restore
             # dotnet cake build.cake --BuildTarget=InstallWorkload
             # cp "C:\Program Files\dotnet\template-packs\*" "C:\Program Files\dotnet\templates\${{ env.DotnetVersion }}"
-            choco install msys2
-            refreshenv
-            pacman -Syu
-            pacman -S mingw-w64-x86_64-gtk3
+            # choco install msys2
+            # refreshenv
+            # pacman -Syu
+            # pacman -S mingw-w64-x86_64-gtk3
             dotnet workload search
             dotnet workload install gtk --skip-manifest-update
 
