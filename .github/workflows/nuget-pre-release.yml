@@ -18,13 +18,14 @@ jobs:
         with:
           dotnet-version: ${{ env.DotnetVersion }}
 
-      - uses: msys2/setup-msys2@v2
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+
       - name: Install gtk3
         shell: msys2 {0}
         run: |
             pacman -S mingw-w64-x86_64-gtk3 --noconfirm
-            SETX /M PATH "%PATH%;C:\msys64\mingw64\bin"
-            SETX /M PATH "%PATH%;C:\msys32\mingw32\bin"
+            # SETX /M PATH "%PATH%;C:\msys64\mingw64\bin"
 
       - name: Install gtk workload
         run: |
