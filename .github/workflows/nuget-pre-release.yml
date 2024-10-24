@@ -34,7 +34,7 @@ jobs:
             dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
             # C:\msys64\usr\bin\wget.exe https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$Env:GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
             $Env:WORKLOAD_MANIFEST_DIR = "C:\Program Files\dotnet\sdk-manifests\${{ env.DotnetVersion }}\gtksharp.net.sdk.gtk"
-            # mkdir -p $Env:WORKLOAD_MANIFEST_DIR
+            mkdir -p $Env:WORKLOAD_MANIFEST_DIR
 
             # install gtk
             git clone https://github.com/GtkSharp/GtkSharp.git
@@ -42,6 +42,8 @@ jobs:
             dotnet tool restore
             dotnet cake build.cake
             ls
+            ls BuildOutput
+            ls BuildOutput/NugetPackages
             tar -xf BuildOutput/NugetPackages/**/gtksharp.net.sdk.gtk.manifest-*.nupkg
             ls
             cp data\* $Env:WORKLOAD_MANIFEST_DIR\
