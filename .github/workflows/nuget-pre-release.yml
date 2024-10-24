@@ -25,10 +25,8 @@ jobs:
         shell: msys2 {0}
         run: |
             pacman -S mingw-w64-x86_64-gtk3 --noconfirm
-            export XDG_DATA_HOME=/d/a/_temp/msys64/mingw64/share
-            echo $XDG_DATA_HOME
-            export XDG_DATA_DIRS=/d/a/_temp/msys64/mingw64/share:/d/a/_temp/msys64/usr/local/share:/d/a/_temp/msys64/usr/share
-            echo $XDG_DATA_DIRS
+            echo "C:\\msys64\\mingw64\\bin" >> $GITHUB_PATH
+            echo "C:\\msys64\\usr\\bin" >> $GITHUB_PATH
 
       - name: Install gtk workload
         run: |
