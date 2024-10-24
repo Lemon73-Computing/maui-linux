@@ -28,6 +28,7 @@ jobs:
             # SETX /M PATH "%PATH%;C:\msys64\mingw64\bin"
 
       - name: Install gtk workload
+        shell: msys2 {0}
         run: |
             # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
             dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
