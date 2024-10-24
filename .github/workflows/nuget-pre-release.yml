@@ -47,7 +47,6 @@ jobs:
             tar -xf gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
             ls
             cp data\* $Env:WORKLOAD_MANIFEST_DIR\
-            cp gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}\data\* $Env:WORKLOAD_MANIFEST_DIR\
             ls $Env:WORKLOAD_MANIFEST_DIR\
             rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
             icacls $Env:WORKLOAD_MANIFEST_DIR\* /grant Everyone:F
