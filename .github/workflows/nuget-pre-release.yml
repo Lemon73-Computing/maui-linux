@@ -13,10 +13,10 @@ jobs:
       - name: Checkout MAUI repository
         uses: actions/checkout@v4
       
-      # - name: Setup .NET SDK ${{ env.DotnetVersion }}
-      #   uses: actions/setup-dotnet@v4
-      #   with:
-      #     dotnet-version: ${{ env.DotnetVersion }}
+      - name: Setup .NET SDK ${{ env.DotnetVersion }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DotnetVersion }}
 
       # - name: Setup MSYS2
       #   uses: msys2/setup-msys2@v2
@@ -28,30 +28,30 @@ jobs:
       #       echo "C:\\msys64\\mingw64\\bin" >> $GITHUB_PATH
       #       echo "C:\\msys64\\usr\\bin" >> $GITHUB_PATH
 
-      - uses: Vampire/setup-wsl@v3
+      # - uses: Vampire/setup-wsl@v3
 
-      - name: Install gtk workload
-        shell: wsl-bash_Debian {0}
-        run: |
-            sudo apt install wget -y
-            wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-            sudo dpkg -i packages-microsoft-prod.deb
-            rm packages-microsoft-prod.deb
-            sudo apt-get update
-            sudo apt-get install -y dotnet-sdk-8.0
-            dotnet workload install maui
-            
-            # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
-            dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
-            wget https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
-            DOTNET_DIR=/home/runner/.dotnet
-            WORKLOAD_MANIFEST_DIR=$DOTNET_DIR/sdk-manifests/${{ env.DotnetVersion }}/gtksharp.net.sdk.gtk
-            mkdir -p $WORKLOAD_MANIFEST_DIR
-            unzip -j gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg "data/*" -d $WORKLOAD_MANIFEST_DIR/
-            rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
-            chmod 764 $WORKLOAD_MANIFEST_DIR/*
-            dotnet workload search
-            dotnet workload install gtk --skip-manifest-update
+      # - name: Install gtk workload
+      #   shell: wsl-bash_Debian {0}
+      #   run: |
+      #       sudo apt install wget -y
+      #       wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      #       sudo dpkg -i packages-microsoft-prod.deb
+      #       rm packages-microsoft-prod.deb
+      #       sudo apt-get update
+      #       sudo apt-get install -y dotnet-sdk-8.0
+      #       dotnet workload install maui
+      #       
+      #       # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
+      #       dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
+      #       wget https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
+      #       DOTNET_DIR=/home/runner/.dotnet
+      #       WORKLOAD_MANIFEST_DIR=$DOTNET_DIR/sdk-manifests/${{ env.DotnetVersion }}/gtksharp.net.sdk.gtk
+      #       mkdir -p $WORKLOAD_MANIFEST_DIR
+      #       unzip -j gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg "data/*" -d $WORKLOAD_MANIFEST_DIR/
+      #       rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
+      #       chmod 764 $WORKLOAD_MANIFEST_DIR/*
+      #       dotnet workload search
+      #       dotnet workload install gtk --skip-manifest-update
 
       - name: Pack
         shell: wsl-bash_Debian {0}
