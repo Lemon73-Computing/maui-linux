@@ -57,7 +57,7 @@ jobs:
       #   shell: wsl-bash_Debian {0}
         run: |
             sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
-            ./build.ps1 --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" -p:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
+            ./build.ps1 --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" -property:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
 
       - name: Push
         run: dotnet nuget push artifacts/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
