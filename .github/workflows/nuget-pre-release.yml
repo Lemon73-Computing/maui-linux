@@ -53,10 +53,12 @@ jobs:
       #       dotnet workload search
       #       dotnet workload install gtk --skip-manifest-update
 
+      - shell: bash
+        run: sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
+
       - name: Pack
       #   shell: wsl-bash_Debian {0}
         run: |
-            sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
             ./build.ps1 --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --property:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
         env:
           DOTNET_ROOT: C:\Program Files\dotnet
