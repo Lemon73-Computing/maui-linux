@@ -58,6 +58,9 @@ jobs:
         run: |
             sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
             ./build.ps1 --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --property:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
+        env:
+          DOTNET_ROOT: C:\Program Files\dotnet
+          PATH: ${{ runner.tool_cache }}/dotnet:$PATH
 
       - name: Push
         run: dotnet nuget push artifacts/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
