@@ -59,8 +59,7 @@ jobs:
       - name: Pack
       #   shell: wsl-bash_Debian {0}
         run: |
-            $env:DOTNET_ROOT = "C:\Program Files\dotnet"
-            ./build.ps1 --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --property:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
+            DOTNET_ROOT="C:\Program Files\dotnet" ./build.ps1 --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --property:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
 
       - name: Push
         run: dotnet nuget push artifacts/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
