@@ -63,7 +63,7 @@ jobs:
         run: |
             Invoke-WebRequest 'https://raw.githubusercontent.com/Samsung/Tizen.NET/main/workload/scripts/workload-install.ps1' -OutFile 'workload-install.ps1';
             ./workload-install.ps1
-            dotnet workload install maui
+            dotnet workload install maui macos android ios maccatalyst maui-desktop maui-mobile
             dotnet workload restore
             dotnet workload search
             dotnet workload list
