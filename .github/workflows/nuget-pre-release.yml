@@ -56,7 +56,7 @@ jobs:
       - shell: bash
         run: |
             sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
-            sed -i 's/"./bin/dotnet/dotnet"/"C:\Program Files\dotnet"/g' eng/cake/dotnet.cake
+            sed -i 's|./bin/dotnet/dotnet|C:\\Program\ Files\\dotnet\\dotnet|g' ファイル名
 
       - name: Pack
       #   shell: wsl-bash_Debian {0}
