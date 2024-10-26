@@ -54,7 +54,9 @@ jobs:
       #       dotnet workload install gtk --skip-manifest-update
 
       - shell: bash
-        run: sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
+        run: |
+            sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
+            sed -i 's/"./bin/dotnet/dotnet"/"C:\Program Files\dotnet"/g' eng/cake/dotnet.cake
 
       - name: Pack
       #   shell: wsl-bash_Debian {0}
