@@ -63,6 +63,7 @@ jobs:
         run: |
             $env:DOTNET_ROOT = "C:\Program Files\dotnet"
             $env:PATH += ";C:\Program Files\dotnet"
+            dotnet workload search
             dotnet workload install tizen
             ./build.ps1 --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --property:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
 
