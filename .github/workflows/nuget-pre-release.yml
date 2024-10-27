@@ -59,7 +59,7 @@ jobs:
             sed -i 's|./bin|C:/Program Files|g' eng/cake/dotnet.cake
             sed -i '/<clear \/>/a \ \ \ \ <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />' NuGet.Config
 
-      - name: Install tizen workload
+      - name: Install maui workloads
         run: |
             Invoke-WebRequest 'https://raw.githubusercontent.com/Samsung/Tizen.NET/main/workload/scripts/workload-install.ps1' -OutFile 'workload-install.ps1';
             ./workload-install.ps1
@@ -78,6 +78,8 @@ jobs:
             ./build.ps1 --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --property:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
 
       - name: Push
-        run: dotnet nuget push artifacts/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
+        run: |
+            ls artifacts
+            dotnet nuget push artifacts/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
         env:
           GITHUB_TOKEN: ${{ secrets.NUGET_API_KEY }}
