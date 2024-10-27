@@ -90,6 +90,7 @@ jobs:
             # sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
             sed -i 's|./bin|C:/Program Files|g' eng/cake/dotnet.cake
             sed -i '/<clear \/>/a \ \ \ \ <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />' NuGet.Config
+            ./eng/common/SetupNugetSources.ps1
 
       - name: Install maui workloads
         run: |
