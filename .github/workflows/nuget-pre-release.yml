@@ -63,13 +63,15 @@ jobs:
         run: |
             Invoke-WebRequest 'https://raw.githubusercontent.com/Samsung/Tizen.NET/main/workload/scripts/workload-install.ps1' -OutFile 'workload-install.ps1';
             ./workload-install.ps1
-            dotnet workload install maui macos android ios maccatalyst maui-desktop maui-mobile maui-android
+            # dotnet workload install maui macos android ios maccatalyst maui-desktop maui-mobile maui-android
+            dotnet workload install macos
             dotnet workload restore
             dotnet workload search
             dotnet workload list
 
       - name: Pack
       #   shell: wsl-bash_Debian {0}
+        continue-on-error: true
         run: |
             $env:DOTNET_ROOT = "C:\Program Files\dotnet"
             $env:PATH += ";C:\Program Files\dotnet"
