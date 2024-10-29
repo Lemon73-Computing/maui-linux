@@ -65,7 +65,7 @@
       <VersionMetadata Condition="'$(GitCommit)' != ''"  Include="sha.$(GitCommit)"/>
 
       <VersionMetadata Condition="$(CI)"
-                       Include="azdo.$(BUILD_BUILDID)"/>
+                       Include="azdo"/>
     </ItemGroup>
 
     <PropertyGroup>
