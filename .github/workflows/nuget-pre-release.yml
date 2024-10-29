@@ -47,6 +47,7 @@ jobs:
 
       - name: Pack
         run: |
+            dotnet nuget locals all --clear
             ./build.sh --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" -p:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
             ls artifacts
 
