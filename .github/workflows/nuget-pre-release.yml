@@ -42,12 +42,12 @@ jobs:
             sed -i 's|./bin|/usr/share|g' eng/cake/dotnet.cake
             dotnet workload install wasi-experimental
             dotnet workload restore
+            dotnet nuget locals all --clear
             dotnet build Microsoft.Maui.BuildTasks.slnf
             dotnet build Microsoft.Maui.Gtk.slnf
 
       - name: Pack
         run: |
-            dotnet nuget locals all --clear
             ./build.sh --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" -p:PackageVersion=${{ env.DotnetVersion }}-preview${{ github.sha }}
             ls artifacts
 
