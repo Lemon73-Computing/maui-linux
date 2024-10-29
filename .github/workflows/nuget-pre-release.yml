@@ -48,7 +48,7 @@ jobs:
 
       - name: Pack
         run: |
-            git clean -xdf # https://github.com/jsuarezruiz/maui-linux/blob/c005e3aff8cf64c792f54f7b06b1f9e4ee310f78/.github/DEVELOPMENT.md#target-a-specific-platform
+            # git clean -xdf # https://github.com/jsuarezruiz/maui-linux/blob/c005e3aff8cf64c792f54f7b06b1f9e4ee310f78/.github/DEVELOPMENT.md#target-a-specific-platform
             ./build.sh --target=dotnet-pack --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --packageVersion="${{ env.DotnetVersion }}" --gtk
 
       - name: Push
