@@ -59,13 +59,13 @@
     <ItemGroup>
       <VersionMetadata Condition="'$(GitSemVerDashLabel)' == '' and '$(GitCommits)' != ''" Include="$(GitCommits)" />
 
-      <VersionMetadata Condition="$(CI) and '$(BUILD_REASON)' == 'PullRequest'"
-                       Include="pr.$(SYSTEM_PULLREQUEST_PULLREQUESTNUMBER)"/>
+      <!-- <VersionMetadata Condition="$(CI) and '$(BUILD_REASON)' == 'PullRequest'"
+                       Include="pr.$(SYSTEM_PULLREQUEST_PULLREQUESTNUMBER)"/> -->
 
       <VersionMetadata Condition="'$(GitCommit)' != ''"  Include="sha.$(GitCommit)"/>
 
-      <VersionMetadata Condition="$(CI)"
-                       Include="azdo"/>
+      <!-- <VersionMetadata Condition="$(CI)"
+                       Include="azdo.$(BUILD_BUILDID)"/> -->
     </ItemGroup>
 
     <PropertyGroup>
