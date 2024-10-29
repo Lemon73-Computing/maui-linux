@@ -37,11 +37,11 @@ jobs:
             dotnet workload install gtk --skip-manifest-update
 
       - name: Build MAUI
-        continue-on-error: true
+        # continue-on-error: true
         run: |
             sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
             dotnet workload install wasi-experimental
-            dotnet workload restore
+            # dotnet workload restore
             # dotnet build Microsoft.Maui.BuildTasks.slnf
             # dotnet build Microsoft.Maui.Gtk.slnf
 
