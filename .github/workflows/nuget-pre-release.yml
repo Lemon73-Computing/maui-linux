@@ -40,6 +40,7 @@ jobs:
         run: |
             sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
             sed -i 's|./bin|/usr/share|g' eng/cake/dotnet.cake
+            dotnet nuget locals all --clear
             dotnet workload install wasi-experimental
             dotnet workload restore
             dotnet nuget locals all --clear
