@@ -1,0 +1,54 @@
+name: Release Nuget Packages on Nuget.org
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  pre-release-nuget:
+    name: Release Nuget Packages
+    runs-on: ubuntu-24.04
+    env:
+      GtkSharpVersion: 3.24.24.117-develop
+      GtkSharpManifestVersion: 8.0.200
+      DotnetVersion: 8.0.200
+    steps:
+      - name: Checkout MAUI repository
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET SDK ${{ env.DotnetVersion }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DotnetVersion }}
+
+      - name: Install GTK Workload
+        run: |
+            # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
+            dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
+            wget https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
+            DOTNET_DIR=/usr/share/dotnet
+            WORKLOAD_MANIFEST_DIR=$DOTNET_DIR/sdk-manifests/${{ env.DotnetVersion }}/gtksharp.net.sdk.gtk
+            mkdir -p $WORKLOAD_MANIFEST_DIR
+            unzip -j gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg "data/*" -d $WORKLOAD_MANIFEST_DIR/
+            rm gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg
+            chmod 764 $WORKLOAD_MANIFEST_DIR/*
+            # curl -sSL https://raw.githubusercontent.com/HavenDV/Gtk/main/scripts/workload-install.sh | bash /dev/stdin -v ${{ env.DotnetVersion }}
+            dotnet workload search
+            dotnet workload install gtk --skip-manifest-update
+
+      - name: Pack
+        run: |
+            sed -i 's/_IncludeAndroid>true/_IncludeAndroid>/g' Directory.Build.Override.props
+            sed -i 's|./bin|/usr/share|g' eng/cake/dotnet.cake
+            sed -i "s/Condition=\"'\$(GitCommit)'/Condition=\"'\$(GitTag)'/g" eng/Versions.targets
+            sed -i 's|sha.$(GitCommit)|tag.$(GitTag)|g' eng/Versions.targets
+            dotnet workload install wasi-experimental
+            ./build.sh --target=dotnet-pack-maui --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --gtk
+
+      - name: Push
+        run: |
+            ls artifacts
+            dotnet nuget push artifacts/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.NUGET_API_KEY }}
