@@ -43,6 +43,12 @@ jobs:
             dotnet workload install wasi-experimental
             ./build.sh --target=dotnet-pack-maui --configuration="Release" --verbosity=diagnostic --nugetsource="artifacts" --gtk
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: artifacts
+
       - name: Push
         run: |
             ls artifacts
