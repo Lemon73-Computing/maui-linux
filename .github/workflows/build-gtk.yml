@@ -4,24 +4,26 @@ on: [push, pull_request]
 jobs:
   build_and_test:
     name: Build & Test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       GtkSharpVersion: 3.24.24.117-develop
       GtkSharpManifestVersion: 8.0.200
       DotnetVersion: 8.0.200
     steps:
       - name: Checkout MAUI repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
       - name: Setup .NET SDK ${{ env.DotnetVersion }}
-        uses: actions/setup-dotnet@v1.7.2
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DotnetVersion }}
+
       - name: Install gtk workload
         run: |
             # For some reason automatic workload manifest detection doesn't work (see https://github.com/GtkSharp/GtkSharp/issues/355#issuecomment-1446262239), so download and uzip mainfest file manually
             dotnet nuget add source --name nuget.org "https://api.nuget.org/v3/index.json"
             wget https://www.nuget.org/api/v2/package/gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}/$GtkSharpVersion -O gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg            
-            DOTNET_DIR=/home/runner/.dotnet
+            DOTNET_DIR=/usr/share/dotnet
             WORKLOAD_MANIFEST_DIR=$DOTNET_DIR/sdk-manifests/${{ env.DotnetVersion }}/gtksharp.net.sdk.gtk
             mkdir -p $WORKLOAD_MANIFEST_DIR
             unzip -j gtksharp.net.sdk.gtk.manifest-${{ env.GtkSharpManifestVersion }}.nupkg "data/*" -d $WORKLOAD_MANIFEST_DIR/
@@ -43,14 +45,13 @@ jobs:
 
   dotnet-format:
     needs: build_and_test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run dotnet format
         run: |
           # remark: doesnt work, alwasy fails:
           # dotnet format whitespace ./src --folder --exclude Templates/src
           git diff --exit-code
-
