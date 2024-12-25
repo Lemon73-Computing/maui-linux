@@ -91,7 +91,7 @@ namespace Microsoft.Maui.Platform
 			set
 			{
 				base.Font = value;
-				UpdatePlaceholderFontSize(value);
+				UpdatePlaceholderFont(value);
 
 			}
 		}
@@ -162,9 +162,8 @@ namespace Microsoft.Maui.Platform
 
 		void ShouldCenterVertically()
 		{
-			var fittingSize = new CGSize(Bounds.Width, NFloat.MaxValue);
-			var sizeThatFits = SizeThatFits(fittingSize);
-			var availableSpace = Bounds.Height - sizeThatFits.Height * ZoomScale;
+			var contentHeight = ContentSize.Height;
+			var availableSpace = Bounds.Height - contentHeight * ZoomScale;
 			if (availableSpace <= 0)
 				return;
 			ContentOffset = VerticalTextAlignment switch
@@ -175,10 +174,10 @@ namespace Microsoft.Maui.Platform
 			};
 		}
 
-		void UpdatePlaceholderFontSize(UIFont? value)
+		void UpdatePlaceholderFont(UIFont? value)
 		{
 			_defaultPlaceholderSize ??= _placeholderLabel.Font.PointSize;
-			_placeholderLabel.Font = _placeholderLabel.Font.WithSize(
+			_placeholderLabel.Font = value ?? _placeholderLabel.Font.WithSize(
 				value?.PointSize ?? _defaultPlaceholderSize.Value);
 		}
 

@@ -382,14 +382,26 @@ namespace Microsoft.Maui.Controls.Build.Tasks
 
 			INode dataTypeNode = null;
 			IElementNode n = node;
+
+			// Special handling for BindingContext={Binding ...}
+			// The order of checks is:
+			// - x:DataType on the binding itself
+			// - SKIP looking for x:DataType on the parent
+			// - continue looking for x:DataType on the parent's parent...
+			IElementNode skipNode = null;
+			if (IsBindingContextBinding(node))
+			{
+				skipNode = GetParent(node);
+			}
+
 			while (n != null)
 			{
-				if (n.Properties.TryGetValue(XmlName.xDataType, out dataTypeNode))
+				if (n != skipNode && n.Properties.TryGetValue(XmlName.xDataType, out dataTypeNode))
+				{
 					break;
-				if (n.Parent is ListNode listNode)
-					n = listNode.Parent as IElementNode;
-				else
-					n = n.Parent as IElementNode;
+				}
+
+				n = GetParent(n);
 			}
 
 			if (dataTypeNode is null)
@@ -475,6 +487,25 @@ namespace Microsoft.Maui.Controls.Build.Tasks
 				yield return Create(Ldnull);
 			yield return Create(Newobj, module.ImportReference(ctorinforef));
 			yield return Create(Callvirt, module.ImportPropertySetterReference(context.Cache, bindingExtensionType, propertyName: "TypedBinding"));
+
+			static IElementNode GetParent(IElementNode node)
+			{
+				return node switch
+				{
+					{ Parent: ListNode { Parent: IElementNode parentNode } } => parentNode,
+					{ Parent: IElementNode parentNode } => parentNode,
+					_ => null,
+				};
+			}
+
+			static bool IsBindingContextBinding(ElementNode node)
+			{
+				// looking for BindingContext="{Binding ...}"
+				return GetParent(node) is IElementNode parentNode
+					&& ApplyPropertiesVisitor.TryGetPropertyName(node, parentNode, out var propertyName)
+					&& propertyName.NamespaceURI == ""
+					&& propertyName.LocalName == nameof(BindableObject.BindingContext);
+			}
 		}
 
 		static IList<(PropertyDefinition property, TypeReference propDeclTypeRef, string indexArg)> ParsePath(ILContext context, string path, TypeReference tSourceRef, IXmlLineInfo lineInfo, ModuleDefinition module)
@@ -927,23 +958,35 @@ namespace Microsoft.Maui.Controls.Build.Tasks
 			//			IL_008e:  newobj instance void class [mscorlib]System.Tuple`2<class [mscorlib]System.Func`2<class ViewModel, object>, string>::'.ctor'(!0, !1)
 			//			IL_0093:  stelem.ref 
 
-			yield return Create(Ldc_I4, properties.Count);
-			yield return Create(Newarr, tupleRef);
-
-			for (var i = 0; i < properties.Count; i++)
+			var handlers = new List<(MethodDefinition PartGetter, string PropertyName)>();
+			for (int i = 0; i < properties.Count; i++)
 			{
 				if (properties[i].property == null)
 					continue;
+
+				var partGetter = partGetters[i];
+				var propertyName = properties[i].Item1.Name;
+
+				handlers.Add((partGetter, propertyName));
+
+				// for indexers add also a handler for the specific index
+				if (properties[i].Item3 is not null)
+				{
+					handlers.Add((partGetter, $"{propertyName}[{properties[i].Item3}]"));
+				}
+			}
+
+			yield return Create(Ldc_I4, handlers.Count);
+			yield return Create(Newarr, tupleRef);
+
+			for (var i = 0; i < handlers.Count; i++)
+			{
 				yield return Create(Dup);
 				yield return Create(Ldc_I4, i);
 				yield return Create(Ldnull);
-				yield return Create(Ldftn, partGetters[i]);
+				yield return Create(Ldftn, handlers[i].PartGetter);
 				yield return Create(Newobj, module.ImportReference(funcCtor));
-				if (properties[i].Item3 == null) //no indexer
-					yield return Create(Ldstr, properties[i].Item1.Name);
-				else
-					yield return Create(Ldstr, $"{properties[i].Item1.Name}[{properties[i].Item3}]");
-
+				yield return Create(Ldstr, handlers[i].PropertyName);
 				yield return Create(Newobj, module.ImportReference(tupleCtor));
 				yield return Create(Stelem_Ref);
 			}
@@ -1217,7 +1260,7 @@ namespace Microsoft.Maui.Controls.Build.Tasks
 			if (varValue.VariableType.IsValueType && bpTypeRef.FullName == "System.Object")
 				return true;
 
-			return varValue.VariableType.InheritsFromOrImplements(context.Cache, bpTypeRef);
+			return varValue.VariableType.InheritsFromOrImplements(context.Cache, bpTypeRef) || varValue.VariableType.FullName == "System.Object";
 		}
 
 		static bool CanGetValue(VariableDefinition parent, FieldReference bpRef, bool attached, IXmlLineInfo iXmlLineInfo, ILContext context, out TypeReference propertyType)
@@ -1259,11 +1302,37 @@ namespace Microsoft.Maui.Controls.Build.Tasks
 			}
 			else if (elementNode != null)
 			{
+				var @else = Create(OpCodes.Nop);
+				var endif = Create(OpCodes.Nop);
+
+				if(context.Variables[elementNode].VariableType.FullName == "System.Object")
+				{
+					//if(value != null && value.GetType().IsAssignableFrom(typeof(BindingBase)))
+					yield return Create(Ldloc, context.Variables[elementNode]);
+					yield return Create(Brfalse, @else);
+					
+					yield return Create(Ldtoken, module.ImportReference(context.Cache, ("Microsoft.Maui.Controls", "Microsoft.Maui.Controls", "BindingBase")));
+					yield return Create(Call, module.ImportMethodReference(context.Cache, ("mscorlib", "System", "Type"), methodName: "GetTypeFromHandle", parameterTypes: new[] { ("mscorlib", "System", "RuntimeTypeHandle") }, isStatic: true));
+					yield return Create(Ldloc, context.Variables[elementNode]);
+					yield return Create(Callvirt, module.ImportMethodReference(context.Cache, ("mscorlib", "System", "Object"), methodName: "GetType",  paramCount: 0));
+					yield return Create(Callvirt, module.ImportMethodReference(context.Cache, ("mscorlib", "System", "Type"), methodName: "IsAssignableFrom", parameterTypes: new[] { ("mscorlib", "System", "Type") }));
+					yield return Create(Brfalse, @else);
+					//then
+					yield return Create(Ldloc, context.Variables[elementNode]);
+					yield return Create(Br, endif);
+					//else
+					yield return @else;
+				}
 				var bpTypeRef = bpRef.GetBindablePropertyType(context.Cache, iXmlLineInfo, module);
 				foreach (var instruction in context.Variables[elementNode].LoadAs(context.Cache, bpTypeRef, module))
 					yield return instruction;
 				if (bpTypeRef.IsValueType)
 					yield return Create(Box, module.ImportReference(bpTypeRef));
+				
+				//endif
+				if(context.Variables[elementNode].VariableType.FullName == "System.Object")
+					yield return endif;
+
 			}
 			yield return Create(Callvirt, module.ImportMethodReference(context.Cache,
 																	   bindableObjectType,
@@ -1623,6 +1692,7 @@ namespace Microsoft.Maui.Controls.Build.Tasks
 				Root = root,
 				XamlFilePath = parentContext.XamlFilePath,
 				LoggingHelper = parentContext.LoggingHelper,
+				ValidateOnly = parentContext.ValidateOnly,
 			};
 
 			//Instanciate nested class
