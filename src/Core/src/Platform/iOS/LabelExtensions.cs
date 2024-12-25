@@ -1,3 +1,4 @@
+using System;
 using Foundation;
 using Microsoft.Maui.Graphics;
 using ObjCRuntime;
@@ -80,7 +81,11 @@ namespace Microsoft.Maui.Platform
 			var attr = new NSAttributedStringDocumentAttributes
 			{
 				DocumentType = NSDocumentType.HTML,
+#if IOS17_5_OR_GREATER || MACCATALYST17_5_OR_GREATER
+				CharacterEncoding = NSStringEncoding.UTF8
+#else
 				StringEncoding = NSStringEncoding.UTF8
+#endif
 			};
 
 			NSError nsError = new();

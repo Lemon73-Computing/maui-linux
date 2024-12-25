@@ -13,7 +13,7 @@ namespace Microsoft.Maui.Controls
 		public static readonly BindableProperty BorderColorProperty = BorderElement.BorderColorProperty;
 
 		/// <summary>Bindable property for <see cref="HasShadow"/>.</summary>
-		public static readonly BindableProperty HasShadowProperty = BindableProperty.Create("HasShadow", typeof(bool), typeof(Frame), true);
+		public static readonly BindableProperty HasShadowProperty = BindableProperty.Create(nameof(HasShadow), typeof(bool), typeof(Frame), true);
 
 		/// <summary>Bindable property for <see cref="CornerRadius"/>.</summary>
 		public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(nameof(CornerRadius), typeof(float), typeof(Frame), -1.0f,
@@ -111,7 +111,8 @@ namespace Microsoft.Maui.Controls
 		Size ICrossPlatformLayout.CrossPlatformArrange(Graphics.Rect bounds)
 		{
 #if !WINDOWS
-			bounds = bounds.Inset(((IBorderElement)this).BorderWidth); // Windows' implementation would cause an incorrect double-counting of the inset
+			if (BorderColor is not null)
+				bounds = bounds.Inset(((IBorderElement)this).BorderWidth); // Windows' implementation would cause an incorrect double-counting of the inset
 #endif
 			this.ArrangeContent(bounds);
 			return bounds.Size;
@@ -121,7 +122,8 @@ namespace Microsoft.Maui.Controls
 		{
 			var inset = Padding;
 #if !WINDOWS
-			inset += ((IBorderElement)this).BorderWidth; // Windows' implementation would cause an incorrect double-counting of the inset
+			if (BorderColor is not null)
+				inset += ((IBorderElement)this).BorderWidth; // Windows' implementation would cause an incorrect double-counting of the inset
 #endif
 			return this.MeasureContent(inset, widthConstraint, heightConstraint);
 		}

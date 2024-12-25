@@ -20,6 +20,13 @@ trigger:
     - SECURITY.md
     - THIRD-PARTY-NOTICES.TXT
 
+schedules:
+- cron: "0 5 * * *"
+  displayName: Run daily at 5:00 UTC
+  branches:
+    include:
+    - main
+    - net9.0
 
 variables:
   - template: /eng/pipelines/common/variables.yml@self
@@ -47,6 +54,8 @@ parameters:
       name: Windows
       artifact: nuget
       binariesArtifact: pack-binaries
+      metadataArtifact: metadata
+      logsArtifact: logs
       docsArtifact: xml-docs
 
   - name: Skip1ESComplianceTasks
@@ -90,6 +99,9 @@ extends:
         - repository: yaml-templates
       suppression:
         suppressionFile: $(Build.SourcesDirectory)\eng\automation\guardian\source.gdnsuppress
+      tsa:
+        enabled: true
+        configFile: '$(Build.SourcesDirectory)\eng\automation\guardian\tsaoptions-v2.json'
     stages:
       - stage: pack_net
         displayName: Pack .NET MAUI
@@ -108,7 +120,7 @@ extends:
                 - output: pipelineArtifact
                   displayName: 'Publish the ${{ parameters.PackPlatform.artifact }} artifacts'
                   artifactName: ${{ parameters.PackPlatform.artifact }}
-                  targetPath: '(Build.ArtifactStagingDirectory)'
+                  targetPath: '$(Build.ArtifactStagingDirectory)/nuget'
                 
                 - output: pipelineArtifact
                   displayName: 'Publish the ${{ parameters.PackPlatform.binariesArtifact }} artifacts'
@@ -120,6 +132,22 @@ extends:
                   artifactName: ${{ parameters.PackPlatform.docsArtifact }}
                   targetPath: '$(System.DefaultWorkingDirectory)/artifacts/docs-packs'
 
+                - output: pipelineArtifact
+                  displayName: 'Publish the ${{ parameters.PackPlatform.metadataArtifact }} artifacts'
+                  artifactName: ${{ parameters.PackPlatform.metadataArtifact }}
+                  targetPath: '$(Build.ArtifactStagingDirectory)/metadata'
+
+                - output: pipelineArtifact
+                  displayName: 'Publish the ${{ parameters.PackPlatform.logsArtifact }} artifacts'
+                  artifactName: ${{ parameters.PackPlatform.logsArtifact }}
+                  targetPath: '$(Build.ArtifactStagingDirectory)/logs'
+            
+            variables:
+              - name: _buildScript
+                value: $(Build.SourcesDirectory)/build.cmd -ci
+              - name: _BuildConfig
+                value: Release
+
             steps:
               - template: /eng/pipelines/common/pack.yml@self
                 parameters:
@@ -128,7 +156,14 @@ extends:
                   provisionatorChannel: ${{ parameters.provisionatorChannel }}
                   artifact: ${{ parameters.PackPlatform.artifact }}
                   artifactBinaries: ${{ parameters.PackPlatform.binariesArtifact }}
-                  artifactsPath: '(Build.ArtifactStagingDirectory)'
+                  artifactsPath: '$(Build.ArtifactStagingDirectory)'
+                  buildConfiguration: $(_BuildConfig)
+                  dotnetScript: $(Build.SourcesDirectory)/dotnet.cmd
+                  buildScript: $(_buildScript)
+                  repoArtifactsPath: $(Build.Arcade.ArtifactsPath)
+                  repoLogPath: $(Build.Arcade.LogsPath)
+                  repoTestResultsPath: $(Build.Arcade.TestResultsPath)
+                  officialBuildId: $(_BuildOfficalId)
                   prepareSteps:
                     - template: /eng/pipelines/common/provision.yml@self
                       parameters:
@@ -161,6 +196,16 @@ extends:
             poolName: ${{ parameters.VM_IMAGE_HOST.name }}
             vmImage: ${{ parameters.VM_IMAGE_HOST.image }}
             os: ${{ parameters.VM_IMAGE_HOST.os }}     
+            tsaUploadEnabled: true
+            tsaConfigFile: '$(Build.SourcesDirectory)\eng\automation\guardian\tsaoptions-v2.json'
             scanArtifacts: ['${{ parameters.PackPlatform.binariesArtifact }}']
 
-        
+        - ${{ if eq(variables['Build.Reason'], 'Schedule') }}:
+          - template: /eng/pipelines/common/push-nightly.yml@self
+            parameters:
+              dependsOn: ['sdk_insertion']
+              stageName: 'nightly'
+              displayName: 'Push Nightly'
+              poolName: ${{ parameters.VM_IMAGE_HOST.name }}
+              vmImage: ${{ parameters.VM_IMAGE_HOST.image }}
+              os: ${{ parameters.VM_IMAGE_HOST.os }}  

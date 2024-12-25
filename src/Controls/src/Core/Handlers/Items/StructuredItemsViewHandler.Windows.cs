@@ -189,7 +189,7 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 
 		static ListViewBase CreateGridView(GridItemsLayout gridItemsLayout)
 		{
-			return new FormsGridView
+			var gridView = new FormsGridView
 			{
 				Orientation = gridItemsLayout.Orientation == ItemsLayoutOrientation.Horizontal
 					? Orientation.Horizontal
@@ -198,6 +198,14 @@ namespace Microsoft.Maui.Controls.Handlers.Items
 				Span = gridItemsLayout.Span,
 				ItemContainerStyle = gridItemsLayout.GetItemContainerStyle()
 			};
+
+			if (gridView.Orientation == Orientation.Horizontal)
+			{
+				ScrollViewer.SetVerticalScrollMode(gridView, WScrollMode.Disabled);
+				ScrollViewer.SetHorizontalScrollMode(gridView, WScrollMode.Enabled);
+			}
+
+			return gridView;
 		}
 
 		void UpdateItemsLayoutSpan()

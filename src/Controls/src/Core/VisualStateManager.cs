@@ -514,7 +514,7 @@ namespace Microsoft.Maui.Controls
 				clone.States.Add(state.Clone());
 			}
 
-			if (DebuggerHelper.DebuggerIsAttached && VisualDiagnostics.GetSourceInfo(this) is SourceInfo info)
+			if (VisualDiagnostics.IsEnabled && VisualDiagnostics.GetSourceInfo(this) is SourceInfo info)
 				VisualDiagnostics.RegisterSourceInfo(clone, info.SourceUri, info.LineNumber, info.LinePosition);
 
 			return clone;
@@ -628,7 +628,7 @@ namespace Microsoft.Maui.Controls
 				clone.StateTriggers.Add(stateTrigger);
 			}
 
-			if (DebuggerHelper.DebuggerIsAttached && VisualDiagnostics.GetSourceInfo(this) is SourceInfo info)
+			if (VisualDiagnostics.IsEnabled && VisualDiagnostics.GetSourceInfo(this) is SourceInfo info)
 				VisualDiagnostics.RegisterSourceInfo(clone, info.SourceUri, info.LineNumber, info.LinePosition);
 
 			return clone;
@@ -695,7 +695,7 @@ namespace Microsoft.Maui.Controls
 				clone.Add(group.Clone());
 			}
 
-			if (DebuggerHelper.DebuggerIsAttached && VisualDiagnostics.GetSourceInfo(groups) is SourceInfo info)
+			if (VisualDiagnostics.IsEnabled && VisualDiagnostics.GetSourceInfo(groups) is SourceInfo info)
 				VisualDiagnostics.RegisterSourceInfo(clone, info.SourceUri, info.LineNumber, info.LinePosition);
 
 			return clone;

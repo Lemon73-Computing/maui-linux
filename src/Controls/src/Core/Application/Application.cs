@@ -108,8 +108,7 @@ namespace Microsoft.Maui.Controls
 
 				if (value is not null)
 				{
-					OnParentResourcesChanged(this.GetMergedResources());
-					OnParentResourcesChanged([new KeyValuePair<string, object>(AppThemeBinding.AppThemeResource, _lastAppTheme)]);
+					value.OnResourcesChanged(this.GetMergedResources());
 					((IElementDefinition)this).AddResourcesChangedListener(value.OnParentResourcesChanged);
 				}
 
@@ -257,6 +256,7 @@ namespace Microsoft.Maui.Controls
 
 				OnParentResourcesChanged([new KeyValuePair<string, object>(AppThemeBinding.AppThemeResource, newTheme)]);
 				_weakEventManager.HandleEvent(this, new AppThemeChangedEventArgs(newTheme), nameof(RequestedThemeChanged));
+				OnPropertyChanged(nameof(UserAppTheme));
 			}
 			finally
 			{
@@ -525,7 +525,7 @@ namespace Microsoft.Maui.Controls
 			throw new NotImplementedException($"Either set {nameof(MainPage)} or override {nameof(Application.CreateWindow)}.");
 		}
 
-		void AddWindow(Window window)
+		internal void AddWindow(Window window)
 		{
 			_windows.Add(window);
 
