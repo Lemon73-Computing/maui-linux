@@ -77,7 +77,8 @@ namespace Microsoft.Maui.Controls.ControlGallery.Issues
 
 				page.Content = layout;
 				return page;
-			};
+			}
+			;
 		}
 
 

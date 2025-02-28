@@ -197,7 +197,8 @@ namespace Microsoft.Maui.Controls.ControlGallery.XamStore
 			{
 				//App.ShowMessageBox("An error occred navigating to the Job List page", "Navigation Failed!");
 				System.Diagnostics.Debug.WriteLine("Navigation failed " + ex.Message);
-			};
+			}
+			;
 		}
 
 		void OpenSearch()

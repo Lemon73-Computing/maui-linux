@@ -764,7 +764,8 @@ namespace Microsoft.Maui.Platform
 				}
 
 				view.ShowSoftInput();
-			};
+			}
+			;
 
 			view.Post(ShowSoftInput);
 		}

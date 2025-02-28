@@ -66,7 +66,8 @@ namespace Microsoft.Maui.Controls.ControlGallery.Issues
 							desc.Text = $"{description}{margin}";
 						});
 					}
-				};
+				}
+				;
 			}).Start();
 
 			Disappearing += (_, __) => disappeared = true;
