@@ -1,10 +1,14 @@
 ﻿using System;
+using Gtk;
 
 namespace Microsoft.Maui.Handlers
 {
 	public partial class RadioButtonHandler : ViewHandler<IRadioButton, NotImplementedView>
 	{
-		protected override NotImplementedView CreatePlatformView() => new(nameof(IRadioButton));
+		protected override RadioButton CreatePlatformView()
+  		{
+	  		// return new RadioButton();
+	 	}
 
 		public static void MapBackground(IRadioButtonHandler handler, IRadioButton radioButton) { }
 		public static void MapIsChecked(IRadioButtonHandler handler, IRadioButton radioButton) { }
