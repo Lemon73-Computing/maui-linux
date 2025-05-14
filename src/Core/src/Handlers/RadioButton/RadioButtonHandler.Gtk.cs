@@ -13,8 +13,12 @@ namespace Microsoft.Maui.Handlers
 
 		[MissingMapper]
 		public static void MapBackground(IRadioButtonHandler handler, IRadioButton radioButton) { }
-		[MissingMapper]
-		public static void MapIsChecked(IRadioButtonHandler handler, IRadioButton radioButton) { }
+
+		public static void MapIsChecked(IRadioButtonHandler handler, IRadioButton radioButton)
+  		{
+			handler.PlatformView?.UpdateIsChecked(radioButton);
+		}
+
 		[MissingMapper]
 		public static void MapContent(IRadioButtonHandler handler, IRadioButton radioButton) { }
 
