@@ -7,7 +7,10 @@ namespace Microsoft.Maui.Handlers
 	{
 		protected override RadioButton CreatePlatformView()
   		{
-	  		// return new RadioButton();
+            var model = new Label(typeof(string));
+			var rb = new RadioButton(model)
+
+            return rb;
 	 	}
 
 		public static void MapBackground(IRadioButtonHandler handler, IRadioButton radioButton) { }
