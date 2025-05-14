@@ -17,12 +17,21 @@ namespace Microsoft.Maui.Handlers
 		public static void MapIsChecked(IRadioButtonHandler handler, IRadioButton radioButton) { }
 		[MissingMapper]
 		public static void MapContent(IRadioButtonHandler handler, IRadioButton radioButton) { }
-		[MissingMapper]
-		public static void MapTextColor(IRadioButtonHandler handler, ITextStyle textStyle) { }
+
+		public static void MapTextColor(IRadioButtonHandler handler, ITextStyle textStyle)
+  		{
+			handler.PlatformView?.UpdateTextColor(textStyle.TextColor);
+   		}
+
 		[MissingMapper]
 		public static void MapCharacterSpacing(IRadioButtonHandler handler, ITextStyle textStyle) { }
-		[MissingMapper]
-		public static void MapFont(IRadioButtonHandler handler, ITextStyle textStyle) { }
+
+		public static void MapFont(IRadioButtonHandler handler, ITextStyle textStyle)
+  		{
+			var fontManager = handler.GetRequiredService<IFontManager>();
+			handler.PlatformView?.UpdateFont(textStyle, fontManager);
+		}
+
 		[MissingMapper]
 		public static void MapStrokeColor(IRadioButtonHandler handler, IRadioButton radioButton) { }
 		[MissingMapper]
