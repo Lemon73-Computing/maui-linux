@@ -8,7 +8,7 @@ namespace Microsoft.Maui.Handlers
 		protected override RadioButton CreatePlatformView()
   		{
             var model = new Label(typeof(string));
-			var rb = new RadioButton(model)
+			var rb = new RadioButton(model);
 
             return rb;
 	 	}
