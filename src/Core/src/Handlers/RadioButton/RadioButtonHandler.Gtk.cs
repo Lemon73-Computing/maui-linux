@@ -3,7 +3,7 @@ using Gtk;
 
 namespace Microsoft.Maui.Handlers
 {
-	public partial class RadioButtonHandler : ViewHandler<IRadioButton, NotImplementedView>
+	public partial class RadioButtonHandler : ViewHandler<IRadioButton, RadioButton>
 	{
 		protected override RadioButton CreatePlatformView()
   		{
