@@ -192,8 +192,11 @@
     <MauiPlatforms Condition="'$(IncludeMacCatalystTargetFrameworks)' == 'true' and '$(MacCatalystTargetFrameworkVersion)' != '$(MacCatalystTargetFrameworkVersionSdkDefault)'">net$(_MauiDotNetVersion)-maccatalyst;$(MauiPlatforms)</MauiPlatforms>
     <MauiPlatforms Condition="'$(IncludeIosTargetFrameworks)' == 'true'">net$(_MauiDotNetVersion)-ios$(IosTargetFrameworkVersion);$(MauiPlatforms)</MauiPlatforms>
     <MauiPlatforms Condition="'$(IncludeIosTargetFrameworks)' == 'true' and '$(IosTargetFrameworkVersion)' != '$(IosTargetFrameworkVersionSdkDefault)'">net$(_MauiDotNetVersion)-ios;$(MauiPlatforms)</MauiPlatforms>
+    <!--
     <MauiPlatforms Condition="'$(IncludeGtkTargetFrameworks)' == 'true'">net$(_MauiDotNetVersion)-gtk$(GtkTargetFrameworkVersion);$(MauiPlatforms)</MauiPlatforms>
     <MauiPlatforms Condition="'$(IncludeGtkTargetFrameworks)' == 'true' and '$(GtkTargetFrameworkVersion)' != '$(GtkTargetFrameworkVersionSdkDefault)'">net$(_MauiDotNetVersion)-gtk;$(MauiPlatforms)</MauiPlatforms>
+    -->
+    <MauiPlatforms Condition="'$(IncludeGtkTargetFrameworks)' == 'true'">net$(_MauiDotNetVersion)-gtk;$(MauiPlatforms)</MauiPlatforms>
 
     <!-- Library: Previous .NET -->
     <WindowsMauiPreviousPlatforms Condition="'$(WindowsMauiPreviousPlatforms)' == ''">net$(_MauiPreviousDotNetVersion)-windows$(WindowsPreviousTargetFrameworkVersion);net$(_MauiPreviousDotNetVersion)-windows$(Windows2PreviousTargetFrameworkVersion)</WindowsMauiPreviousPlatforms>
