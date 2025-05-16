@@ -31,8 +31,10 @@ namespace Microsoft.Maui.DeviceTests.TestCases
 			new object[] { typeof(Editor) },
 			new object[] { typeof(Ellipse) },
 			new object[] { typeof(Entry) },
-			new object[] { typeof(Frame) },
-			new object[] { typeof(GraphicsView) },
+#pragma warning disable CS0618 // Type or member is obsolete
+            new object[] { typeof(Frame) },
+#pragma warning restore CS0618 // Type or member is obsolete
+            new object[] { typeof(GraphicsView) },
 			new object[] { typeof(Image) },
 			new object[] { typeof(ImageButton) },
 			new object[] { typeof(IndicatorView) },
@@ -77,7 +79,9 @@ namespace Microsoft.Maui.DeviceTests.TestCases
 				handlers.AddHandler<DatePicker, DatePickerHandler>();
 				handlers.AddHandler<Entry, EntryHandler>();
 				handlers.AddHandler<Editor, EditorHandler>();
+#pragma warning disable CS0618 // Type or member is obsolete
 				handlers.AddHandler<Frame, FrameRenderer>();
+#pragma warning restore CS0618 // Type or member is obsolete
 				handlers.AddHandler<GraphicsView, GraphicsViewHandler>();
 				handlers.AddHandler<Label, LabelHandler>();
 				handlers.AddHandler<ListView, ListViewRenderer>();

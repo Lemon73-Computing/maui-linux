@@ -7,26 +7,12 @@ namespace Microsoft.Maui.Benchmarks
 	public class VisualTreeBenchmarker
 	{
 		static readonly View[] Views = [
-			new Border(),
-			new BoxView(),
-			new CarouselView(),
-			new Grid(),
-			new Entry(),
-			new Picker(),
-			new CollectionView(),
-			new CheckBox(),
-			new DatePicker(),
-			new Stepper(),
-			new Slider(),
-			new ActivityIndicator(),
+			new Border(), new BoxView(), new CarouselView(), new Grid(), new Entry(), new Picker(), new CollectionView(),
+			new CheckBox(), new DatePicker(), new Stepper(), new Slider(), new ActivityIndicator(), 
+			#pragma warning disable CS0618 // Type or member is obsolete
 			new Frame(),
-			new ContentView(),
-			new ProgressBar(),
-			new SearchBar(),
-			new Switch(),
-			new TimePicker(),
-			new WebView(),
-			new Button(),
+			#pragma warning restore CS0618 // Type or member is obsolete
+			new ContentView(), new ProgressBar(), new SearchBar(), new Switch(), new TimePicker(), new WebView(), new Button(),
 		];
 
 		private const int Iterations = 100;
