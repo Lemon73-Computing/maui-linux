@@ -8,7 +8,7 @@ jobs:
     env:
       GtkSharpVersion: 3.24.24.117-develop
       GtkSharpManifestVersion: 8.0.200
-      DotnetVersion: 8.0.200
+      DotnetVersion: 9.0.300
     steps:
       - name: Checkout MAUI repo
         uses: actions/checkout@v4
