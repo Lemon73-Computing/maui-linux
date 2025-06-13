@@ -8,7 +8,8 @@ namespace Microsoft.Maui.Handlers
 		protected override RadioButton CreatePlatformView()
   		{
  			// Note: We set a random GUID as the GroupName as part of the work-around in https://github.com/dotnet/maui/issues/11418
-			return new RadioButton(Guid.NewGuid().ToString());
+			// return new RadioButton() { GroupName = Guid.NewGuid().ToString() };
+			return new RadioButton();
 	 	}
 
 		[MissingMapper]
