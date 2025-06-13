@@ -5,11 +5,11 @@ namespace Microsoft.Maui.Handlers
 {
 	public partial class RadioButtonHandler : ViewHandler<IRadioButton, RadioButton>
 	{
+		RadioButton baseRadioButton = new("base");
+   
 		protected override RadioButton CreatePlatformView()
   		{
- 			// Note: We set a random GUID as the GroupName as part of the work-around in https://github.com/dotnet/maui/issues/11418
-			// return new RadioButton() { GroupName = Guid.NewGuid().ToString() };
-			return new RadioButton();
+			return new RadioButton(baseRadioButton, "foo");
 	 	}
 
 		[MissingMapper]
