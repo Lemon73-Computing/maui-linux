@@ -9,7 +9,7 @@ namespace Microsoft.Maui.Handlers
 		{
 			RadioButton baseRadioButton = new("rb");
 	 		RadioButton rb = new(baseRadioButton, "foo");
-			rb.Active = false;
+			// rb.Active = false;
 			return rb;
 		}
 
