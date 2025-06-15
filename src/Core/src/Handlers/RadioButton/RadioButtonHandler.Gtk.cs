@@ -7,7 +7,10 @@ namespace Microsoft.Maui.Handlers
 	{
 		protected override RadioButton CreatePlatformView()
 		{
-			return new RadioButton("foo");
+			RadioButton baseRadioButton = new("rb");
+	 		RadioButton rb = new(baseRadioButton, "foo");
+			rb.Active = false;
+			return rb;
 		}
 
 		protected override void ConnectHandler(RadioButton platformView)
