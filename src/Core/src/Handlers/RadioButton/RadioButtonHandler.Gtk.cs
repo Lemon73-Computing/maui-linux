@@ -14,12 +14,14 @@ namespace Microsoft.Maui.Handlers
 
 		protected override void ConnectHandler(RadioButton platformView)
 		{
-			platformView.Clicked += OnClicked;
+			platformView.Toggled += OnClicked;
+			// base.ConnectHandler(platformView);
 		}
 
 		protected override void DisconnectHandler(RadioButton platformView)
 		{
-			platformView.Clicked -= OnClicked;
+			platformView.Toggled -= OnClicked;
+			// base.DisconnectHandler(platformView);
 		}
 
 		[MissingMapper]
