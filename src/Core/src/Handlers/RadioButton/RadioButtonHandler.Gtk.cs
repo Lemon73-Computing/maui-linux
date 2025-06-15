@@ -9,7 +9,6 @@ namespace Microsoft.Maui.Handlers
 		{
 			RadioButton baseRadioButton = new("rb");
 	 		RadioButton rb = new(baseRadioButton, "foo");
-			// rb.Active = false;
 			return rb;
 		}
 
@@ -67,12 +66,8 @@ namespace Microsoft.Maui.Handlers
 
 		void OnClicked(object? sender, EventArgs e)
 		{
-			if (VirtualView == null || PlatformView == null)
-			{
-				return;
-			}
-
-			// VirtualView.IsChecked = PlatformView.Active == true;
+			if (sender is RadioButton platformView && VirtualView != null)
+				VirtualView.IsChecked = platformView.Active;
 		}
 	}
 }
