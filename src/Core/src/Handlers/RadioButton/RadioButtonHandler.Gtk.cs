@@ -5,11 +5,11 @@ namespace Microsoft.Maui.Handlers
 {
 	public partial class RadioButtonHandler : ViewHandler<IRadioButton, RadioButton>
 	{
+		static RadioButton baseRadioButton = new("base");
+
 		protected override RadioButton CreatePlatformView()
 		{
-			RadioButton baseRadioButton = new("rb");
-	 		RadioButton rb = new(baseRadioButton, "foo");
-			return rb;
+			return new RadioButton(baseRadioButton, "foo");
 		}
 
 		protected override void ConnectHandler(RadioButton platformView)
