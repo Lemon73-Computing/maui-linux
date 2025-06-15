@@ -1,5 +1,5 @@
-﻿using System;
-using Gtk;
+﻿using Gtk;
+using System;
 
 namespace Microsoft.Maui.Handlers
 {
@@ -30,18 +30,14 @@ namespace Microsoft.Maui.Handlers
 		public static void MapIsChecked(IRadioButtonHandler handler, IRadioButton radioButton)
 		{
 			if (handler.PlatformView is RadioButton rb)
-			{
 				rb.UpdateIsChecked(radioButton);
-			}
 			// handler.PlatformView?.UpdateIsChecked(radioButton);
 		}
 
 		public static void MapContent(IRadioButtonHandler handler, IRadioButton radioButton)
 		{
 			if (handler.PlatformView is RadioButton rb)
-			{
 				rb.UpdateContent(radioButton);
-			}
 			// handler.PlatformView?.UpdateContent(radioButton);
 		}
 
@@ -61,8 +57,10 @@ namespace Microsoft.Maui.Handlers
 
 		[MissingMapper]
 		public static void MapStrokeColor(IRadioButtonHandler handler, IRadioButton radioButton) { }
+
 		[MissingMapper]
 		public static void MapStrokeThickness(IRadioButtonHandler handler, IRadioButton radioButton) { }
+
 		[MissingMapper]
 		public static void MapCornerRadius(IRadioButtonHandler handler, IRadioButton radioButton) { }
 
