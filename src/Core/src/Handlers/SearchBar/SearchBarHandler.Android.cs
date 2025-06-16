@@ -155,8 +155,7 @@ namespace Microsoft.Maui.Handlers
 
 				var virtualView = Handler.VirtualView;
 
-				if (virtualView != null)
-					virtualView.IsFocused = hasFocus;
+				virtualView?.IsFocused = hasFocus;
 			}
 		}
 	}

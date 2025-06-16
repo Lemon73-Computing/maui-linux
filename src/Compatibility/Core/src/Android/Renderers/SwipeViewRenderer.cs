@@ -1471,8 +1471,7 @@ namespace Microsoft.Maui.Controls.Compatibility.Platform.Android
 
 		void EnableParentGesture(bool isGestureEnabled)
 		{
-			if (_viewPagerParent != null)
-				_viewPagerParent.EnableGesture = isGestureEnabled;
+			_viewPagerParent?.EnableGesture = isGestureEnabled;
 		}
 
 		void OnOpenRequested(object sender, OpenRequestedEventArgs e)
