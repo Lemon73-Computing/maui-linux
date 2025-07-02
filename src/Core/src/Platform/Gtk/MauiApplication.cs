@@ -7,7 +7,7 @@ using Microsoft.Maui.LifecycleEvents;
 
 namespace Microsoft.Maui
 {
-	public abstract class MauiGtkApplication : IPlatformApplication
+	public abstract class MauiApplication : IPlatformApplication
 	{
 		protected abstract MauiApp CreateMauiApp();
 
