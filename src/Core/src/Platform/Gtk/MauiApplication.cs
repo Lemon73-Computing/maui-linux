@@ -13,7 +13,7 @@ namespace Microsoft.Maui
 
 		// https://docs.gtk.org/gio/type_func.Application.id_is_valid.html
 		// TODO: find a better algo for id
-		public virtual string ApplicationId => $"{typeof(MauiGtkApplication).Namespace}.{nameof(MauiGtkApplication)}.{Name}".PadRight(255, ' ').Substring(0, 255).Trim();
+		public virtual string ApplicationId => $"{typeof(MauiApplication).Namespace}.{nameof(MauiApplication)}.{Name}".PadRight(255, ' ').Substring(0, 255).Trim();
 
 		string? _name;
 
@@ -27,7 +27,7 @@ namespace Microsoft.Maui
 		// https://docs.gtk.org/gtk3/class.Application.html
 		public static Gtk.Application CurrentGtkApplication { get; internal set; } = null!;
 
-		public static MauiGtkApplication Current { get; internal set; } = null!;
+		public static MauiApplication Current { get; internal set; } = null!;
 
 		public MauiGtkMainWindow MainWindow { get; protected set; } = null!;
 
