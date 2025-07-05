@@ -10,7 +10,6 @@
     <NoWarn>$(NoWarn);NU5104;RS0041;RS0026;RS0036</NoWarn>
     <WarningsAsErrors>$(WarningsAsErrors);CS1591</WarningsAsErrors>
     <NoWarn Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">$(NoWarn);CA1420</NoWarn>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <!-- NuGet package information -->
