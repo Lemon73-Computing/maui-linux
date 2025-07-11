@@ -9,6 +9,12 @@ namespace Microsoft.Maui
 {
 	public abstract class MauiApplication : IPlatformApplication
 	{
+		protected MauiApplication()
+		{
+			Current = this;
+			IPlatformApplication.Current = this;
+		}
+
 		protected abstract MauiApp CreateMauiApp();
 
 		// https://docs.gtk.org/gio/type_func.Application.id_is_valid.html
