@@ -15,6 +15,7 @@ namespace Microsoft.Maui.Controls.Internals
 				controller.EffectControlProvider = null;
 
 			controller = newElement;
+
 			controller?.EffectControlProvider = self;
 		}
 
